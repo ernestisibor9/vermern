@@ -10,6 +10,10 @@ const cors = require('cors')
 let PORT = 5000;
 dbConnect()
 
+app.get('/', async(req, res)=>{
+    res.send("Good things")
+})
+
 app.use(express.json())
 app.use(cors())
 app.use('/api/user', userRoute)
