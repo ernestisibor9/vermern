@@ -1,21 +1,16 @@
 const Product = require('../model/Product')
-const express = require('express');
-const cloudnary = require('../utils/cloudinary')
+
 
 const addProduct = async(req, res) =>{
     try {
         const {name, description, price, image} = req.body
-        const result = await cloudnary.uploader.upload(image, {
-            folder: "products",
-        })
+        // Image upload
+        const imageName = req.file.filename
         const product = await Product.create({
             name,
             description,
             price,
-            image:{
-                public_id: result.public_id,
-                url: result.secure_url,
-            }
+            image: imageName,
         })
         res.status(201).json({
             success: true,
@@ -27,4 +22,19 @@ const addProduct = async(req, res) =>{
     }
 }
 
-module.exports = {addProduct}
+
+  // Fetch all products
+  const getAllProducts = async (req, res) => {
+    try{
+        const products = await Product.find();
+        return res.status(200).json({
+            success: true,
+            products: products,
+        });
+    }
+    catch(err){
+        return res.status(500).json({message: err.message});
+    }
+  };
+
+module.exports = {addProduct, getAllProducts }

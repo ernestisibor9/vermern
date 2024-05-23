@@ -52,7 +52,7 @@ const loginUser = async (req, res) => {
       res.status(200).json({
         success: true,
         message: "Person logged in successfully",
-        Person: PersonExist,
+        person: PersonExist,
         token: token,
       });
     } catch (err) {
