@@ -39,7 +39,7 @@ function Home() {
   const [products, setProducts] = useState([]);
   const getAllProducts = async () => {
     const response = await axios.get(
-      "http://localhost:5000/api/product/getallproducts"
+      "https://bookeeper-backend.onrender.com/api/product/getallproducts"
     );
     console.log(response.data.products);
     setProducts(response.data.products);
