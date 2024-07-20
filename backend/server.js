@@ -11,7 +11,7 @@ let PORT = process.env.PORT || 5000;
 dbConnect()
 
 app.get('/', async(req, res)=>{
-    res.send("Good things")
+    res.send("Good things sweet")
 })
 
 app.use(express.json())
