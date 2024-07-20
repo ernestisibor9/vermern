@@ -11,7 +11,7 @@ function Home() {
     try {
       const token = JSON.parse(localStorage.getItem("user"));
       const response = await axios.get(
-        "http://localhost:5000/api/user/getloggedinuser",
+        "https://bookeeper-backend.onrender.com/api/user/getloggedinuser",
         {
           headers: {
             Authorization: `Bearer ${token}`,
