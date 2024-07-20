@@ -34,7 +34,7 @@ function ResetPassword() {
     } else {
       try {
         const response = await axios.post(
-          `http://localhost:5000/api/user/reset-password/${id}/${token}`,
+          `https://bookeeper-backend.onrender.com/api/user/reset-password/${id}/${token}`,
           user
         );
         // console.log(response);
