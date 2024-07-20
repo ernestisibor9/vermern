@@ -45,7 +45,7 @@ function EditProduct() {
     } else {
       try {
         const response = await axios.put(
-          `http://localhost:5000/api/product/updateproduct/${id}`, {name, description, price}
+          `https://bookeeper-backend.onrender.com/${id}`, {name, description, price}
 
         );
         console.log(response.data);
