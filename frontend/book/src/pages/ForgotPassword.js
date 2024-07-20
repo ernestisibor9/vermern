@@ -30,7 +30,7 @@ function ForgotPassword() {
     } else {
       try {
         const response = await axios.post(
-          "http://localhost:5000/api/user/forgotten-password",
+          "https://bookeeper-backend.onrender.com/api/user/forgotten-password",
           user
         );
         // console.log(response);
