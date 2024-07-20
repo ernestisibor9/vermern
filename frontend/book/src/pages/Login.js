@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 function Login() {
@@ -38,6 +38,17 @@ function Login() {
         // console.log(response);
         if (response.data.success) {
           toast.success(response.data.message);
+          localStorage.setItem("user", JSON.stringify(response.data.token));
+          // for role
+          // if(response.data.person.role === "admin") {
+          //   navigation('/admin');
+          // }
+          // if(response.data.person.role === "teacher") {
+          //   navigation('/teacher');
+          // }
+          // if(response.data.person.role === "student") {
+          //   navigation('/student');
+          // }
           navigation('/')
         } else {
           toast.error(response.data.message);
@@ -79,6 +90,9 @@ function Login() {
                     <button type="submit" className="btn btn-primary">
                       Login
                     </button>
+                  </div>
+                  <div className="mt-2 mb-2">
+                    <Link to = '/forgot-password'>Forgot Password</Link>
                   </div>
                 </form>
               </div>

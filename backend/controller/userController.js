@@ -2,6 +2,7 @@ const express = require("express");
 const User = require("../model/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
 
 // Register a user
 const registerUser = async (req, res) => {
@@ -94,4 +95,102 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-module.exports = {registerUser, loginUser, getLoggedInUser, getAllUsers}
+// Forgotten Password
+const forgottenUserPassword = async (req, res) => {
+  const { email} = req.body;
+
+  try {
+    const PersonExist = await User.findOne({ email: email });
+    if (!PersonExist) {
+      return res.json({ message: "User does not exist" });
+    }
+
+    // Generate the token
+    const token = jwt.sign({ userId: PersonExist._id }, process.env.JWT_SECRET_KEY, {
+      expiresIn: "1d",
+    });
+
+    // Nodemailer
+    var transporter = nodemailer.createTransport({
+      service: "gmail",
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false, // true for 465, false for other ports
+      // service: 'gmail',
+      auth: {
+        user: 'ernestisibor9@gmail.com',
+        pass: 'vodqjazgpznwrhzz'
+      }
+    });
+    
+    var mailOptions = {
+      from: 'ernestisibor9@gmail.com',
+      to: `${PersonExist.email}`,
+      subject: 'Reset Your Password',
+      text: `http://localhost:3000/reset-password/${PersonExist._id}/${token}`
+    };
+    
+    transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+        console.log(error);
+      } else {
+        return res.send({
+          success: true,
+        })
+      }
+    });
+
+    res.status(200).json({
+      success: true,
+      message: "Email reset successfully",
+      person: PersonExist,
+      token: token,
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+const resetUserPassword = async(req, res)=>{
+  const { id, token } = req.params;
+  const { password } = req.body;
+
+  const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY)
+  if(!decoded) {
+    return res.json({
+      success: false,
+      message: 'Token is invalid'
+    })
+  }
+  else{
+    // Encrypt the password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const user = await User.findByIdAndUpdate({_id: id}, {password: hashedPassword})
+    if (!user) {
+      return res.json({
+        success: false,
+        message: 'User not found'
+      })
+    }
+    res.status(200).json({
+      success: true,
+      message: "Password reset successfully",
+      user: user,
+    });
+
+    // const user = await User.findById(userId);
+    // user.password =  hashedPassword;
+    // await user.save();
+    // res.status(200).json({
+    //   success: true,
+    //   message: "Password reset successfully",
+    //   user: user,
+    // });
+  }
+}
+
+
+module.exports = {registerUser, loginUser, getLoggedInUser, getAllUsers, forgottenUserPassword, resetUserPassword}

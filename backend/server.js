@@ -7,7 +7,7 @@ const userRoute = require('./route/userRoute')
 const productRoute = require('./route/productRoute')
 const cors = require('cors')
 
-let PORT = 5000;
+let PORT = process.env.PORT || 5000;
 dbConnect()
 
 app.get('/', async(req, res)=>{
