@@ -15,7 +15,7 @@ function EditProduct() {
 
     const getOneProduct = async()=>{
         try{
-            const response = await axios.get(`http://localhost:5000/api/product/getoneproduct/${id}`);
+            const response = await axios.get(`https://bookeeper-backend.onrender.com/api/product/getoneproduct/${id}`);
             console.log(response.data);
             setName(response.data.product.name);
             setDescription(response.data.product.description);
