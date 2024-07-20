@@ -27,7 +27,7 @@ function AddProductPage() {
         else{
             try {
                 const response = await axios.post(
-                  "http://localhost:5000/api/product/addproduct",
+                  "https://bookeeper-backend.onrender.com/api/product/addproduct",
                   formData, {
                     headers: {
                       "Content-Type": "multipart/form-data",
